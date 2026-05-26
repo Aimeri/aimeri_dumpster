@@ -114,3 +114,19 @@ RegisterNetEvent('aimeri_dumpster:server:attemptBobbyPin', function(name, succes
         notify(src, "Failed", "error")
     end
 end)
+
+RegisterCommand('cleardumpsterlocks', function(source)
+    if not Config.DebugLock then return end
+
+    MySQL.query.await('DELETE FROM aimeri_dumpster')
+    dumpsterLocks = {}
+
+    print('[aimeri_dumpster] All dumpster locks cleared.')
+
+    if source > 0 then
+        TriggerClientEvent('ox_lib:notify', source, {
+            description = 'All dumpster locks cleared.',
+            type = 'success'
+        })
+    end
+end, true)
